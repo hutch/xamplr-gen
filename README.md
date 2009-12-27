@@ -20,6 +20,12 @@ Yes, that means that there's no documentation. And no examples. I agree, this is
 
 This will install all three gems.
 
+NOTE: if you have installed hutch-xamplr or hutch-xamplr-pp then
+you should uninstall them. For some reason, in certain circumstances,
+these might be loaded or partially loaded when trying to use xampl.
+If you don't you'll experience strange exceptions with hutch-xamplr
+or hutch-xamplr-pp on the stack trace.
+
 
 ## License:
 
