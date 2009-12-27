@@ -1,5 +1,5 @@
 
-require 'xamplr-generator'
+#require 'xampl-generator'
 
 include XamplGenerator
 include Xampl

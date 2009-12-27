@@ -4,4 +4,4 @@ xamplr-gen
 
 == Copyright
 
-Copyright (c) 2009 Bob Hutchison. See LICENSE for details.
+Copyright (c) 2002-2010 Bob Hutchison. See LICENSE for details.

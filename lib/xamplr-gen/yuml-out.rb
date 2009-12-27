@@ -1,5 +1,3 @@
-require 'fileutils'
-require 'set'
 
 module XamplGenerator
 

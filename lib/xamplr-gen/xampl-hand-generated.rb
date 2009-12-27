@@ -1,12 +1,11 @@
+
 module XamplGenerator
 
-  require "xamplr"
   include Xampl
 
   XamplObject.ns_preferred_prefix("http://xampl.com/generator", "gen")
 
   module ElementsAsChild
-    require "xamplr/indexed-array"
 
     def elements_child
       accessed

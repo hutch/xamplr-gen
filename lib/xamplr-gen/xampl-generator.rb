@@ -1,13 +1,5 @@
-require 'fileutils'
-require 'getoptlong'
-require 'set'
 
 module XamplGenerator
-  require "xamplr"
-  require "xamplr/xampl-hand-generated"
-  require "xamplr/simpleTemplate/simple-template"
-  require "xamplr/graphml-out.rb"
-  require "xamplr/yuml-out.rb"
 
   class Attribute
     attr_accessor :tag_name
@@ -34,15 +26,15 @@ module XamplGenerator
     attr_accessor :elements_map, :options, :templates
 
     @@standard_templates = [
-            "xamplr/templates/child_modules.template",
-            "xamplr/templates/child.template",
-            "xamplr/templates/child_indexed.template",
-            "xamplr/templates/element_classes.template",
-            "xamplr/templates/element_data.template",
-            "xamplr/templates/element_empty.template",
-            "xamplr/templates/element_mixed.template",
-            "xamplr/templates/element_simple.template",
-            "xamplr/templates/package.template",
+            "xamplr-gen/templates/child_modules.template",
+            "xamplr-gen/templates/child.template",
+            "xamplr-gen/templates/child_indexed.template",
+            "xamplr-gen/templates/element_classes.template",
+            "xamplr-gen/templates/element_data.template",
+            "xamplr-gen/templates/element_empty.template",
+            "xamplr-gen/templates/element_mixed.template",
+            "xamplr-gen/templates/element_simple.template",
+            "xamplr-gen/templates/package.template",
     ]
 
     def initialize(options_in = nil, *predefined_elements)
@@ -94,10 +86,10 @@ module XamplGenerator
       element.nstag = nstag
       element.empty = is_empty
 
-      @xpp.attribute_name.each_index do |i|
+      @xpp.attributeName.each_index do |i|
         attribute = Attribute.new
-        attribute.name = @xpp.attribute_name[i]
-        attribute.namespace = @xpp.attribute_namespace[i]
+        attribute.name = @xpp.attributeName[i]
+        attribute.namespace = @xpp.attributeNamespace[i]
         element.add_attribute(attribute)
       end
 

@@ -5,13 +5,15 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "xamplr-gen"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{This is the xampl code generator for Ruby}
+    gem.description = %Q{This is the xampl code generator for Ruby.}
     gem.email = "hutch@xampl.com"
     gem.homepage = "http://github.com/hutch/xamplr-gen"
     gem.authors = ["Bob Hutchison"]
     gem.add_development_dependency "cucumber", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+
+    gem.add_dependency('xamplr', '>=1.9.0')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

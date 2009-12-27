@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 #!/usr/bin/env ruby -w -I..
 
-require 'xamplr-generator'
-require 'xamplr/xampl-cl-gen'
+require 'xamplr-gen'
+require 'xamplr-gen/xampl-cl-gen'
 
 include XamplGenerator
 include Xampl
