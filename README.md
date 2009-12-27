@@ -2,17 +2,19 @@
 
 xamplr-gen is part of a set of software tools that supports development of ruby applications.
 
-It consists of three gems hosted on gem cutter, source code on
-github.
+It consists of three gems hosted on gemcutter, source code on github.
 
-* xamplr-pp -- this is a pure ruby pull parser
-* xamplr -- this is the xampl runtime
-* xamplr-gen -- this is the code generator
+* [xamplr-pp](http://github.com/hutch/xamplr-pp) -- this is a pure ruby pull parser
+* [xamplr](http://github.com/hutch/xamplr) -- this is the xampl runtime
+* [xamplr-gen](http://github.com/hutch/xamplr-gen) -- this is the code generator
 
 There is an additional fourth github repository containing
 examples and documentation that will be coming soon.
 
-Yes, that means that there's no documentation. And no examples. I agree, this is a very bad situation.
+Yes, that means that there's no documentation. And no examples. I agree,
+this is a very bad situation.
+
+For more information, see [the xampl page on xampl.com](http://xampl.com/so/xampl/), and/or [the weblog 'So.'](http://xampl.com/so/)
 
 ## Installation:
 
