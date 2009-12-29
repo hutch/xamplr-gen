@@ -8,10 +8,12 @@ include XamplGenerator
 include Xampl
 
 project_specialisations = File.join(%w{ . project-generator.rb })
+specialised = false
 if File.exists?(project_specialisations) then
   load project_specialisations
+  specialised = true
 end
 
-generator = ProjectGenerator.new
+generator = ProjectGenerator.new(specialised)
 generator.generate
 

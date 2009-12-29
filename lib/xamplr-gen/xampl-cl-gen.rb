@@ -6,6 +6,10 @@ include Xampl
 
 class ProjectGenerator
 
+  def initialize(specialised=true)
+    @specialised = specialised
+  end
+
   def directory
     File.join(%w{ . xampl_generated_code })
   end
@@ -50,6 +54,52 @@ class ProjectGenerator
     []
   end
 
+  @@specialisation_file_content = <<_EOF_
+class ProjectGenerator
+
+  def print_options
+    # return an array containing any (or none) of:
+    #    :schema    -- a schema-like xml representation of the generated code
+    #    :graphml   -- a graphml file describing the class model (compatible with yEd)
+    #    :yuml      -- a yuml file that represents a simplified class model (compatible with yUML)
+
+    #[ :yuml ]
+    []
+  end
+
+  def resolve_namespaces
+    # any array of arrays
+    # each sub-array:
+    #    0: a string or an array of strings, containing xml namespaces found
+    #       in the example xml files an empty string is the default namespace
+    #    1: a ruby Module name (get the character cases right)
+    #    2: a namespace prefix used when writing xml, optional. A generated
+    #       prefix will be used otherwise.
+
+    [
+            #["http://xampl.com/scraps", "Scraps", "s"],
+{{MAPPING}}
+    ]
+  end
+end
+_EOF_
+
+  def write_specialisation_file
+    filename = './project-generator.rb'
+    if File.exists? filename  then
+      puts "will not over-write"
+      return
+    end
+
+    text =  @@specialisation_file_content.gsub(/{{MAPPING}}/) do 
+      "## MAPPINGS GO HERE"
+    end
+
+    File.open(filename, 'w') do | out |
+      out.write text
+    end
+  end
+
   def generate
 
 #      Xampl.set_default_persister_kind(:simple)
@@ -57,6 +107,7 @@ class ProjectGenerator
 #      Xampl.set_default_persister_kind(:filesystem)
 #      Xampl.set_default_persister_kind(:tokyo_cabinet)
 #      Xampl.set_default_persister_format(:xml_format)
+
 
     Xampl.transaction("project-generation") do
 
@@ -81,6 +132,7 @@ class ProjectGenerator
                    :directory => directory)
 
       puts generator.print_elements(print_base_filename, print_options)
+      self.write_specialisation_file
 
       Xampl.rollback
     end
