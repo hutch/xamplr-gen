@@ -117,11 +117,11 @@ _EOF_
     OptionParser.new do |opts|
       opts.banner = "Usage: junk.rb [options]"
 
-      opts.on("--download-yuml-png", "Download the yuml png file if possible.") do |v|
-        cl_options[:download_yuml_png] = true
+      opts.on("--download-yuml-png [FILENAME]", "Download the yuml png file if possible.") do | filename |
+        cl_options[:download_yuml_png] = filename || true
       end
-      opts.on("--download-yuml-pdf", "Download the yuml pdf file if possible.") do |v|
-        cl_options[:download_yuml_pdf] = true
+      opts.on("--download-yuml-pdf [FILENAME]", "Download the yuml pdf file if possible.") do | filename |
+        cl_options[:download_yuml_pdf] = filename || true
       end
     end.parse!
 
@@ -199,10 +199,12 @@ _EOF_
             end
           end
 
+
           okay = false
           if cl_options[:download_yuml_png] then
             begin
-              wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}' -O 'generated.png'"
+              filename = (true == cl_options[:download_yuml_png]) ?  'generated.png' : cl_options[:download_yuml_png]
+              wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}' -O '#{filename}'"
               okay = system(wget)
               if okay then
                 puts "downloaded yuml png"
@@ -216,7 +218,8 @@ _EOF_
 
           if cl_options[:download_yuml_pdf] then
             begin
-              wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}.pdf' -O 'generated.pdf'"
+              filename = (true == cl_options[:download_yuml_png]) ?  'generated.png' : cl_options[:download_yuml_png]
+              wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}.pdf' -O '#{filename}'"
               okay = system(wget)
               puts "downloaded yuml pdf"
               if okay then
