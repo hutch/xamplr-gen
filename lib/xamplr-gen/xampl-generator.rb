@@ -278,7 +278,6 @@ module XamplGenerator
         if directory_name then
           output_filename = File.join(directory_name, "#{package_name}.rb")
           puts "WRITE TO FILE: #{output_filename}"
-          #puts package_definition
           File.open(output_filename, "w") do |file|
             file.puts package_definition
           end

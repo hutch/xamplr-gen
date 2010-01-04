@@ -1,5 +1,4 @@
-
-#require 'xampl-generator'
+require 'optparse'
 
 include XamplGenerator
 include Xampl
@@ -11,7 +10,7 @@ class ProjectGenerator
   end
 
   def directory
-    File.join(%w{ . xampl_generated_code })
+    File.join(%w{ . xampl-generated-code })
   end
 
   def filenames
@@ -63,8 +62,12 @@ class ProjectGenerator
     #    :graphml   -- a graphml file describing the class model (compatible with yEd)
     #    :yuml      -- a yuml file that represents a simplified class model (compatible with yUML)
 
-    #[ :yuml ]
-    []
+    [ :yuml ]
+  end
+
+  def directory
+    # return the path name to the generator's output directory
+    File.join(%w{ . xampl-generated-code })
   end
 
   def resolve_namespaces
@@ -77,22 +80,30 @@ class ProjectGenerator
     #       prefix will be used otherwise.
 
     [
-            #["http://xampl.com/scraps", "Scraps", "s"],
 {{MAPPING}}
     ]
   end
 end
 _EOF_
 
-  def write_specialisation_file
+  def write_specialisation_file(element_map)
     filename = './project-generator.rb'
-    if File.exists? filename  then
-      puts "will not over-write"
-      return
+    return if File.exists? filename
+
+    mappings = []
+    count = 0
+    element_map.each do | ns, elements |
+      module_name = elements.element.first.package || 'XamplAdHoc'
+      count += 1
+      mappings << [ ns, module_name, "ns#{ count }" ]
     end
 
     text =  @@specialisation_file_content.gsub(/{{MAPPING}}/) do 
-      "## MAPPINGS GO HERE"
+      insert = []
+      mappings.each do | ns, module_name, prefix |
+        insert << "            ['#{ ns }', '#{ module_name }', '#{ prefix }'],"
+      end
+      insert.join("\n")
     end
 
     File.open(filename, 'w') do | out |
@@ -102,12 +113,36 @@ _EOF_
 
   def generate
 
+    cl_options = {}
+    OptionParser.new do |opts|
+      opts.banner = "Usage: junk.rb [options]"
+
+      opts.on("--download-yuml-png", "Download the yuml png file if possible.") do |v|
+        cl_options[:download_yuml_png] = true
+      end
+      opts.on("--download-yuml-pdf", "Download the yuml pdf file if possible.") do |v|
+        cl_options[:download_yuml_pdf] = true
+      end
+    end.parse!
+
 #      Xampl.set_default_persister_kind(:simple)
     Xampl.set_default_persister_kind(:in_memory)
 #      Xampl.set_default_persister_kind(:filesystem)
 #      Xampl.set_default_persister_kind(:tokyo_cabinet)
 #      Xampl.set_default_persister_format(:xml_format)
 
+    dirname = self.directory
+    if File.directory? dirname then
+      begin
+      FileUtils.rm_rf([ dirname ])
+      rescue => e
+        puts "could not clean up #{ dirname } -- #{ e }"
+        return
+      end
+    elsif File.exists? dirname then
+      puts "please move #{ dirname } out of the way of xampl-gen"
+      return
+    end
 
     Xampl.transaction("project-generation") do
 
@@ -132,7 +167,69 @@ _EOF_
                    :directory => directory)
 
       puts generator.print_elements(print_base_filename, print_options)
-      self.write_specialisation_file
+      self.write_specialisation_file(generator.elements_map)
+
+      generated_files = Dir.glob("#{ self.directory }/*.rb")
+      if 0 < generated_files.size then
+        all = []
+        abs = []
+        generated_files.each do | filename |
+          all << "require '#{ File.dirname(filename)[2..-1] }/#{  File.basename(filename, '.rb') }'"
+          abs_filename = File.expand_path(filename)
+          abs << "require '#{ File.dirname(abs_filename) }/#{  File.basename(abs_filename, '.rb') }'"
+        end
+
+        out_filename = "#{ self.directory }/all.rb"
+        File.open(out_filename, 'w') do | out |
+          out.puts all.join("\n")
+        end
+        puts "WRITE TO FILE: #{ out_filename }"
+
+        out_filename = "#{ self.directory }/all-absolute.rb"
+        File.open(out_filename, 'w') do | out |
+          out.puts abs.join("\n")
+        end
+        puts "WRITE TO FILE: #{ out_filename }"
+
+        if File.exists?('./generated.yuml') && (cl_options[:download_yuml_png] || cl_options[:download_yuml_pdf]) then
+          diagram = ""
+          File.open("./generated.yuml") do | f |
+            f.each do | line |
+                diagram << line.chomp
+            end
+          end
+
+          okay = false
+          if cl_options[:download_yuml_png] then
+            begin
+              wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}' -O 'generated.png'"
+              okay = system(wget)
+              if okay then
+                puts "downloaded yuml png"
+              else
+                puts "could not get the yuml png file -- #{ $? }"
+              end
+            rescue => e
+              puts "could not get the yuml png file -- #{ e }"
+            end
+          end
+
+          if cl_options[:download_yuml_pdf] then
+            begin
+              wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}.pdf' -O 'generated.pdf'"
+              okay = system(wget)
+              puts "downloaded yuml pdf"
+              if okay then
+                puts "downloaded yuml pdf"
+              else
+                puts "could not get the yuml pdf file -- #{ $? }"
+              end
+            rescue => e
+              puts "could not get the yuml pdf file -- #{ e }"
+            end
+          end
+        end
+      end
 
       Xampl.rollback
     end
