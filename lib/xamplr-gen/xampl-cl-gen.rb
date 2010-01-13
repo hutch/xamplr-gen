@@ -172,11 +172,12 @@ _EOF_
       generated_files = Dir.glob("#{ self.directory }/*.rb")
       if 0 < generated_files.size then
         all = []
-        abs = []
+        #abs = []
         generated_files.each do | filename |
-          all << "require '#{ File.dirname(filename)[2..-1] }/#{  File.basename(filename, '.rb') }'"
-          abs_filename = File.expand_path(filename)
-          abs << "require '#{ File.dirname(abs_filename) }/#{  File.basename(abs_filename, '.rb') }'"
+          all << "require \"\#\{ File.dirname __FILE__ \}/#{ File.basename(filename, '.rb') }\""
+          #all << "require '#{ File.dirname(filename)[2..-1] }/#{ File.basename(filename, '.rb') }'"
+          #abs_filename = File.expand_path(filename)
+          #abs << "require '#{ File.dirname(abs_filename) }/#{ File.basename(abs_filename, '.rb') }'"
         end
 
         out_filename = "#{ self.directory }/all.rb"
@@ -185,11 +186,11 @@ _EOF_
         end
         puts "WRITE TO FILE: #{ out_filename }"
 
-        out_filename = "#{ self.directory }/all-absolute.rb"
-        File.open(out_filename, 'w') do | out |
-          out.puts abs.join("\n")
-        end
-        puts "WRITE TO FILE: #{ out_filename }"
+        #out_filename = "#{ self.directory }/all-absolute.rb"
+        #File.open(out_filename, 'w') do | out |
+        #  out.puts abs.join("\n")
+        #end
+        #puts "WRITE TO FILE: #{ out_filename }"
 
         if File.exists?('./generated.yuml') && (cl_options[:download_yuml_png] || cl_options[:download_yuml_pdf]) then
           diagram = ""
