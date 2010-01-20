@@ -171,7 +171,7 @@
     end
 
     def remove_from(other)
-      other.remove_#{@element.attribute_name}(self)
+      other.remove_#{@element.attribute_name}(self) if (other.respond_to?("remove_#{@element.attribute_name}"))
     end
 
 |
