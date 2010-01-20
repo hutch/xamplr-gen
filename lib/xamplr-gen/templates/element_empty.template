@@ -167,7 +167,11 @@
     end
 
     def append_to(other)
-      other.add_#{element.attribute_name}(self)
+      other.add_#{@element.attribute_name}(self)
+    end
+
+    def remove_from(other)
+      other.remove_#{@element.attribute_name}(self)
     end
 
 |

@@ -170,6 +170,10 @@
       other.add_#{@element.attribute_name}(self)
     end
 
+    def remove_from(other)
+      other.remove_#{@element.attribute_name}(self)
+    end
+
 |
 |if @element.persisted then
 |
