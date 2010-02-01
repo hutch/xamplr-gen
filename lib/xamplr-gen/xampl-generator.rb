@@ -211,10 +211,6 @@ module XamplGenerator
     end
 
     def generate(directory_name, params={:verbose => false}, &eval_context)
-      if directory_name then
-        FileUtils.mkdir_p(directory_name) unless File.exist?(directory_name)
-      end
-
       ensure_templates
 
       module_names = Set.new
@@ -244,12 +240,34 @@ module XamplGenerator
           if element.class_name == element.package then
             puts "ERROR: Class #{ element.package } is in a module with the same name -- this NOT going to work"
           elsif module_names.member?(element.class_name)
-            puts "WARNING: a Class and a Module have the same name (#{ element.package }) -- this is highly unlikely to work"
+            puts "WARNING: a Class and a Module have the same name (#{ element.package } or maybe #{ element.class_name }) -- this is highly unlikely to work"
           end
 
           @templates.child_modules(place)
         end
       end
+
+      unless @generated_package_map then
+        puts "Nothing to do. That is, NOTHING is generated. (Are you where you think you are?)"
+        return false
+      end
+
+      if File.directory? directory_name then
+        begin
+          FileUtils.rm_rf([ directory_name ])
+        rescue => e
+          puts "could not clean up #{ directory_name } -- #{ e }"
+          return
+        end
+      elsif File.exists? directory_name then
+        puts "please move #{ directory_name } out of the way of xampl-gen"
+        return
+      end
+
+      if directory_name then
+        FileUtils.mkdir_p(directory_name) unless File.exist?(directory_name)
+      end
+
 
       @elements_map.each do |ns, elements|
         elements.element_child.each do |element|
@@ -290,6 +308,7 @@ module XamplGenerator
       end
 
       report_elements if params[:verbose]
+      return true
     end
 
     def report_elements
