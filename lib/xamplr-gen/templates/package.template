@@ -12,7 +12,7 @@ module #{package_name}
 |
 | @required_packages.each_key{ | required_package_name |
 |
-  require "#{required_package_name}"
+  require "\#\{ File.dirname __FILE__ }/#{required_package_name}"
 |
 | }
 |
