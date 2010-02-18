@@ -13,7 +13,7 @@ begin
     gem.add_development_dependency "cucumber", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
 
-    gem.add_dependency('xamplr', '>=1.9.6')
+    gem.add_dependency('xamplr', '>=1.9.7')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
