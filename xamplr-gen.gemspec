@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{xamplr-gen}
-  s.version = "1.9.9"
+  s.version = "1.9.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bob Hutchison"]
-  s.date = %q{2010-02-18}
+  s.date = %q{2010-03-13}
   s.default_executable = %q{xampl-gen}
   s.description = %q{This is the xampl code generator for Ruby.}
   s.email = %q{hutch@xampl.com}
