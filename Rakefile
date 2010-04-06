@@ -14,7 +14,7 @@ begin
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
 
     gem.add_dependency('xamplr-pp', '>=1.2.0')
-    gem.add_dependency('xamplr', '>=1.9.8')
+    gem.add_dependency('xamplr', '>=1.9.9')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
