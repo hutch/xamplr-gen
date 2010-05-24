@@ -44,11 +44,11 @@
 |@element.attribute_child.each{ | attribute |
 |  if attribute.namespace then
 |
-                     [ :@#{attribute.name}, "#{attribute.name}", "#{attribute.namespace}" ],
+                     [ :@#{attribute.name}, "#{attribute.tag_name}", "#{attribute.namespace}" ],
 |
 |  else
 |
-                     [ :@#{attribute.name}, "#{attribute.name}" ],
+                     [ :@#{attribute.name}, "#{attribute.tag_name}" ],
 |
 |  end
 |}

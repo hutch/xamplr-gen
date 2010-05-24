@@ -18,7 +18,8 @@ class ProjectGenerator
   end
 
   def print_base_filename
-    File.join(%w{ . generated })
+    #File.join(%w{ . generated })
+    'generated'
   end
 
   def print_options
@@ -172,7 +173,7 @@ _EOF_
                           :directory => directory)
 
       if okay
-        puts generator.print_elements(print_base_filename, print_options)
+        puts generator.print_elements("#{ directory }/#{ print_base_filename }", print_options)
         self.write_specialisation_file(generator.elements_map)
 
         generated_files = Dir.glob("#{ self.directory }/*.rb")
@@ -198,20 +199,19 @@ _EOF_
           #end
           #puts "WRITE TO FILE: #{ out_filename }"
 
-          if File.exists?('./generated.yuml') && (cl_options[:download_yuml_png] || cl_options[:download_yuml_pdf]) then
+          if File.exists?("#{ self.directory }/generated.yuml") && (cl_options[:download_yuml_png] || cl_options[:download_yuml_pdf]) then
             diagram = ""
-            File.open("./generated.yuml") do | f |
+            File.open("#{ self.directory }/generated.yuml") do | f |
               f.each do | line |
                 diagram << line.chomp
               end
             end
 
-
             okay = false
             if cl_options[:download_yuml_png] then
               begin
                 filename = (true == cl_options[:download_yuml_png]) ?  'generated.png' : cl_options[:download_yuml_png]
-                wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}' -O '#{filename}'"
+                wget = "wget 'http://yuml.me/diagram/scruffy/class/#{diagram}' -O '#{ self.directory }/#{filename}'"
                 okay = system(wget)
                 if okay then
                   puts "downloaded yuml png"

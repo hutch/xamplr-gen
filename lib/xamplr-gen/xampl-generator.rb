@@ -573,6 +573,7 @@ module XamplGenerator
       generator.comprehend_from_files(filenames)
       generator.generate_to_directory(directory)
 
+      #TODO -- are these writing to the correct location, is this even possible to call anymore?
       generator.print_elements(write_elements) if write_elements
     end
   end
