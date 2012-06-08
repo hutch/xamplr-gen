@@ -86,16 +86,16 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<cucumber>, [">= 0"])
       s.add_runtime_dependency(%q<xamplr-pp>, [">= 1.2.0"])
-      s.add_runtime_dependency(%q<xamplr>, [">= 1.9.14"])
+      s.add_runtime_dependency(%q<xamplr>, [">= 1.9.16"])
     else
       s.add_dependency(%q<cucumber>, [">= 0"])
       s.add_dependency(%q<xamplr-pp>, [">= 1.2.0"])
-      s.add_dependency(%q<xamplr>, [">= 1.9.14"])
+      s.add_dependency(%q<xamplr>, [">= 1.9.16"])
     end
   else
     s.add_dependency(%q<cucumber>, [">= 0"])
     s.add_dependency(%q<xamplr-pp>, [">= 1.2.0"])
-    s.add_dependency(%q<xamplr>, [">= 1.9.14"])
+    s.add_dependency(%q<xamplr>, [">= 1.9.16"])
   end
 end
 
