@@ -1,6 +1,12 @@
 
 |
   class #{@element.class_name}
+    def #{@element.class_name}.discriminate(attr_name, attr_namespace, attr_value)
+      # override to decide which class to actually instantiate when loading (this
+      # is useful only when there are multiple subclasses defined on this class)
+      return #{@element.class_name}
+    end
+
 |
 |if @element.persisted then
 |
@@ -9,6 +15,9 @@
     #supports class based over-ride of persister format
     @@default_persister_format = nil
 
+    def self.persistence_class
+      #{@element.class_name}
+    end
     def default_persister_format
       @@default_persister_format
     end
